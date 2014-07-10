@@ -120,7 +120,7 @@ sparkle_ui.create.poll_availability = function(url, error_url){
             });
             error_redirect = sparkle_ui.config('create_poll_error_redirect_url', error_url);
             if(error_redirect){
-              setTimeout(function(){document.location = error_redirect;}, 10000);
+              setTimeout(function(){window.document.location = error_redirect;}, 10000);
             }
           }
         }
@@ -181,7 +181,7 @@ sparkle_ui.form.enable_updatable_selectors = function(){
           window.rails.alert.open('Error updating form!');
         });
       } else {
-        document.location = $(this).attr('sparkle-url') + '?' + $.param(data);
+        window.document.location = $(this).attr('sparkle-url') + '?' + $.param(data);
       }
     });
   }
