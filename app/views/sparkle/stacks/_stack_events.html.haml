@@ -1,0 +1,21 @@
+%div.panel-group#stack-events
+  %div.panel.panel-default
+    %div.panel-heading
+      %h4.panel-title
+        %a.accordion-toggle{'data-toggle' => 'collapse', :href => '#events-display'}
+          Events
+    %div.panel-collapse.collapse#events-display{:class => stack.success? ? '' : 'in'}
+      %div.panel-body
+        %table.table.table-striped.table-bordered.table-hover
+          %thead
+            %tr
+              %th
+                Timestamp
+              %th
+                Name
+              %th
+                Status
+              %th
+                Message
+          %tbody#stack-event-list{'data-url' => events_sparkle_stack_path(stack.encoded_id), 'data-state' => stack.in_progress? ? 'active' : 'passive'}
+            = render :partial => 'stack_event_item', :collection => stack.events

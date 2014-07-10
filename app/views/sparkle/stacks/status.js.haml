@@ -1,0 +1,13 @@
+- @stacks.each do |stack|
+  - if stack.complete?
+    :erb
+      $('#<%= stack.stack_name %>_info').replaceWith("<%= j(render(:partial => 'stack_info', :locals => {:stack_info => stack})) %>");
+      $('#<%= stack.stack_name %>_info').addClass('highlight-<%= stack.text_state %>');
+      setTimeout(function(){$('#<%= stack.stack_name %>_info').removeClass('highlight-<%= stack.text_state %>');}, 2000);
+  - else
+    :erb
+      $('#<%= stack.stack_name %>_progress_bar').attr('style', 'width: <%= stack.percent_complete %>%');
+- @removed_stacks.each do |stack_name|
+  :erb
+    $('#<%= stack_name %>_info').addClass('highlight-danger');
+    setTimeout(function(){ $('#<%= stack_name %>_info').fadeOut({complete: function(){ $('#<%= stack_name %>_info').remove(); }}); }, 1800);

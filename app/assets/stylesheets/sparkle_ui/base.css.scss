@@ -1,0 +1,62 @@
+@import "bootstrap";
+
+@-webkit-keyframes fade-success {
+  0% {background: $brand-success;}
+  100% {background: none;}
+}
+
+@keyframes fade-success {
+  0% {background: $brand-success;}
+  100% {background: none;}
+}
+
+@-webkit-keyframes fade-warning {
+  0% {background: $brand-warning;}
+  100% {background: none;}
+}
+
+@keyframes fade-warning {
+  0% {background: $brand-warning;}
+  100% {background: none;}
+}
+
+@-webkit-keyframes fade-danger {
+  0% {background: $brand-danger;}
+  100% {background: none;}
+}
+
+@keyframes fade-danger {
+  0% {background: $brand-danger;}
+  100% {background: none;}
+}
+
+.highlight-success {
+  -webkit-animation: fade-success 2s ease-in 1;
+  animation: fade-success 2s ease-in 1;
+}
+
+.highlight-warning {
+  -webkit-animation: fade-warning 2s ease-in 1;
+  animation: fade-warning 2s ease-in 1;
+}
+
+.highlight-danger {
+  -webkit-animation: fade-danger 2s ease-in 1;
+  animation: fade-danger 2s ease-in 1;
+}
+
+#stack-info-list{
+  margin-bottom: 0;
+}
+
+.stack-controls{
+  padding-right: 0.5em;
+}
+
+.stack-controls a{
+  margin: 0.2em;
+}
+
+.stack-controls button{
+  margin: 0.2em;
+}

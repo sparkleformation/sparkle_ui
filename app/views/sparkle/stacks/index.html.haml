@@ -1,0 +1,14 @@
+%div.container.sparkle-ui#stack-listing
+  %div.panel-group#stack-list
+    %div.panel.panel-default{:style => 'border: 0;'}
+      %div.panel-title
+        %h1= Rails.application.config.sparkle.fetch(:ui_index_title, 'Stacks')
+      %div.panel-body
+        %div.sparkle-pagination= will_paginate @stacks
+        %ul.list-group#stack-info-list{'data-url' => status_sparkle_stacks_path}
+          = render :partial => 'stack_info', :collection => @stacks
+        %div.sparkle-pagination= will_paginate @stacks
+
+- if Rails.application.config.sparkle.fetch(:ui_index_polling, true)
+  :javascript
+    sparkle_ui.list.poll();

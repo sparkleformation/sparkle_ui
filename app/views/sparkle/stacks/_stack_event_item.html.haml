@@ -1,0 +1,5 @@
+%tr{:class => stack_event_item.resource_status_reason.to_s.downcase.include?('fail') ? 'danger' : ''}
+  %td= stack_event_item.event_time
+  %td= stack_event_item.logical_resource_id
+  %td= stack_event_item.resource_status
+  %td= stack_event_item.resource_status_reason

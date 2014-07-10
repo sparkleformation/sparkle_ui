@@ -1,0 +1,30 @@
+%div.container.sparkle-ui#stack-info{'data-id' => @stack.encoded_id}
+  %div
+    %h2.title.pull-left= @stack.stack_name
+    %div.pull-right
+      %span.label{:class => "label-#{@stack.text_state}"}= @stack.status
+    %div.clearfix
+
+  - if @stack.success?
+    = render :partial => 'stack_outputs', :locals => {:stack => @stack}
+  - else
+    = render :partial => 'stack_events', :locals => {:stack => @stack}
+  = render :partial => 'stack_resources', :locals => {:stack => @stack}
+  = render :partial => 'stack_nodes', :locals => {:stack => @stack}
+  = render :partial => 'stack_parameters', :locals => {:stack => @stack}
+  = render :partial => 'stack_template', :locals => {:stack => @stack}
+  - unless @stack.success?
+    = render :partial => 'stack_outputs', :locals => {:stack => @stack}
+  - else
+    = render :partial => 'stack_events', :locals => {:stack => @stack}
+
+  - if @stack.success?
+    %a.btn.btn-success{:href => export_sparkle_stack_path(@stack.encoded_id)}
+      Export
+  - else
+    %a.btn.btn-danger.disabled{:href => '#'}
+      Export
+
+- if @stack.in_progress?
+  :javascript
+    sparkle_ui.show.poll();

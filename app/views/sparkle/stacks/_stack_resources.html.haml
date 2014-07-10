@@ -1,0 +1,26 @@
+%div.panel-group#stack-resources
+  %div.panel.panel-default
+    %div.panel-heading
+      %h4.panel-title
+        %a.accordion-toggle{'data-toggle' => 'collapse', :href => '#resources-display'}
+          Resources
+    %div.panel-collapse.collapse#resources-display
+      %div.panel-body
+        %table.table.table-striped.table-bordered.table-hover
+          %thead
+            %tr
+              %th
+                Name
+              %th
+                Type
+              %th
+                Status
+              %th
+                Timestamp
+          %tbody
+            - stack.resources.each do |resource|
+              %tr
+                %td= resource.logical_resource_id
+                %td= resource.resource_type
+                %td= resource.resource_status
+                %td= resource.updated_time

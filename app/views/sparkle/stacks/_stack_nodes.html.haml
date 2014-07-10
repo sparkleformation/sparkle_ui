@@ -1,0 +1,15 @@
+%div.panel-group#stack-nodes
+  %div.panel.panel-default
+    %div.panel-heading
+      %h4.panel-title
+        %a.accordion-toggle{'data-toggle' => 'collapse', :href => '#nodes-display'}
+          Nodes
+    %div.panel-collapse.collapse#nodes-display
+      %div.panel-body
+        %table.table.table-striped.table-bordered.table-hover
+          %tbody
+            - stack.nodes.each do |node_info|
+              %tr
+                %td
+                  %b= node_info[:id]
+                %td= node_info[:public_ip]

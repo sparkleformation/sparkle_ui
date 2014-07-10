@@ -1,0 +1,9 @@
+%div.panel-group#stack-template
+  %div.panel.panel-default
+    %div.panel-heading
+      %h4.panel-title
+        %a.accordion-toggle{'data-toggle' => 'collapse', :href => '#template-display'}
+          Template
+    %div.panel-collapse.collapse#template-display
+      %div.panel-body
+        %pre#stack-template-json~ JSON.pretty_generate(stack.template)

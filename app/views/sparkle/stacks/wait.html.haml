@@ -1,0 +1,5 @@
+:javascript
+  $(document).ready(function(){
+    window_rails.loading.open({title: "Initializing stack (#{@stack_name})"});
+    sparkle_ui.create.poll_availability("#{wait_sparkles_path(:stack_name => @stack_name)}", "#{sparkle_stacks_path}");
+  });

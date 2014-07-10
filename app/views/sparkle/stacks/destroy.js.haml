@@ -1,0 +1,3 @@
+:erb
+  $('#<%= @stack.stack_name %>_info').addClass('highlight-danger');
+  setTimeout(function(){ $('#<%= @stack.stack_name %>_info').fadeOut({complete: function(){ $('#<%= @stack.stack_name %>_info').remove(); }}); }, 1800);

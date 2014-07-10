@@ -1,0 +1,7 @@
+%div.container.sparkle-ui#stack-creation
+  %div.title
+    %h1= Rails.application.config.sparkle.fetch(:ui_new_title, 'Create Stack')
+  %div.panel-group#stack-new
+    %div.panel.panel-default
+      %div.panel-body
+        = render :partial => 'form', :locals => {:template => @template, :template_file => @template_file, :stack_name => @stack_name, :template_list => @templates, :style => 'new'}

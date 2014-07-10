@@ -1,0 +1,19 @@
+%div.panel-group#stack-parameters
+  %div.panel.panel-default
+    %div.panel-heading
+      %h4.panel-title
+        %a.accordion-toggle{'data-toggle' => 'collapse', :href => '#parameters-display'}
+          Parameters
+    %div.panel-collapse.collapse#parameters-display
+      %div.panel-body
+        %table.table.table-striped.table-bordered.table-hover
+          %tbody
+            - (stack.parameters || {}).each do |name, value|
+              %tr
+                %td
+                  %b= name.underscore.humanize
+                %td
+                  - if value.start_with?('http:')
+                    %a{:href => value}= value
+                  - else
+                    = value

@@ -1,0 +1,19 @@
+%div.panel-group#stack-outputs
+  %div.panel.panel-default
+    %div.panel-heading
+      %h4.panel-title
+        %a.accordion-toggle{'data-toggle' => 'collapse', :href => '#outputs-display'}
+          Outputs
+    %div.panel-collapse.collapse#outputs-display{:class => stack.success? ? 'in' : ''}
+      %div.panel-body
+        %table.table.table-striped.table-bordered.table-hover
+          %tbody
+            - stack.outputs.each do |output|
+              %tr
+                %td
+                  %b= output.key.underscore.humanize
+                %td
+                  - if output.value =~ /^https?:/
+                    %a{:href => output.value}= output.value
+                  - else
+                    = output.value

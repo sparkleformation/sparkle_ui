@@ -1,0 +1,21 @@
+%li.list-group-item.stack-summary{:id => "#{stack_info.stack_name}_info"}
+  %div.row.stack-progress
+    %h4.col-md-5= stack_info.stack_name
+    %div.col-md-7
+      %div.progress{:class => stack_info.in_progress? ? 'progress-striped active' : '', :id => "#{stack_info.stack_name}_progress", 'data-stack-name' => stack_info.stack_name}
+        %div.progress-bar{:class => "progress-bar-#{stack_info.text_state}", :style => "width: #{stack_info.percent_complete}%", :id => "#{stack_info.stack_name}_progress_bar"}
+  %div.row.stack-meta
+    %div.col-md-5.stack-status
+      %span.label{:class => "label-#{stack_info.text_state}"}= stack_info.status
+    %div.col-md-4.stack-creation
+      Built
+      - if stack_info.creation_time
+        = "#{distance_of_time_in_words_to_now(stack_info.creation_time)} ago"
+        %em= "(#{stack_info.creation_time})"
+      - else
+        %em
+          Unknown
+    %div.md-col-3.stack-controls
+      = link_to 'Status', sparkle_stack_path(stack_info.encoded_id), :class => 'btn btn-sm btn-info pull-right'
+      - if stack_info.complete? && SparkleUi.stack_modification_allowed?(current_user, stack_info)
+        %button.btn.btn-sm.btn-danger.window-rails.pull-right{'window-rails-ajax' => :delete, 'window-rails-url' => sparkle_stack_path(stack_info.encoded_id), 'window-rails-confirm' => "Destroy stack (#{stack_info.stack_name})?", 'window-rails-progress' => "Destroying stack #{stack_info.stack_name}", 'window-rails-title' => 'Stack destruction'}= 'Destroy'
