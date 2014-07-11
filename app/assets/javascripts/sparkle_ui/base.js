@@ -1,4 +1,4 @@
-var sparkle_ui = {list: {}, show: {}, form: {}, create: {}, configuration: {}, load_messages: {}};
+var sparkle_ui = {display: {}, list: {}, show: {}, form: {}, create: {}, configuration: {}, load_messages: {}};
 
 /**
  * Provide configuration value or default value
@@ -13,6 +13,22 @@ sparkle_ui.config = function(key, default_value){
   } else {
     return sparkle_ui.configuration[key];
   }
+}
+
+/**
+ * Highlight the element
+ *
+ * @param dom_id [String] DOM ID of the element
+ * @param state [String] success, warning, danger (defaults warning)
+ **/
+sparkle_ui.display.highlight = function(dom_id, state){
+  if(state == undefined){
+    state = 'warning';
+  }
+  $('#' + dom_id).addClass('highlight-' + state);
+  setTimeout(function(){
+    $('#' + dom_id).removeClass('highlight-' + state);
+  }, 2100);
 }
 
 /**
