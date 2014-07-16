@@ -208,3 +208,12 @@ sparkle_ui.form.enable_updatable_selectors = function(){
   $(document).ready(updater);
   $(document).on('page:load', updater);
 }
+
+sparkle_ui.form.hook_submission = function(){
+  $('#sparkle-stack-creator').submit(
+    function(){
+      $('#sparkle-stack-creator [disabled]').removeProp('disabled');
+      return;
+    }
+  );
+}
