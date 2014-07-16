@@ -146,6 +146,7 @@ class Sparkle::StacksController < ApplicationController
       result = "Stack has been destroyed: #{@stack.stack_name}"
     rescue => error
       Rails.logger.error "Failed to destroy stack: #{error.class}: #{error}"
+      Rails.logger.debug "#{error.class}: #{error}\n#{error.backtrace.join("\n")}"
       result = error.message
     end
     respond_to do |format|
