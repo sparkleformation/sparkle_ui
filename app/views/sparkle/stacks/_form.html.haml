@@ -1,23 +1,24 @@
-= form_tag sparkle_stacks_path, :method => :post, :role => 'form' do
+= form_tag sparkle_stacks_path, :method => :post, :role => 'form', :id => 'sparkle-stack-creator' do
   %div.md-col-12.form-group
     = label_tag(:template_file)
     = select_tag(:template_file, grouped_options_for_select(template_list, template_file), :class => 'form-control', 'sparkle-url' => new_sparkle_stack_path, 'sparkle-serialize' => 'only-self')
-  - if stack_name
-    %div.md-col-12.form-group
-      = label_tag(:stack_name)
-      = text_field_tag(:stack_name, @stack_name, :class => 'form-control')
+  %div.md-col-12.form-group
+    = label_tag(:stack_name)
+    = text_field_tag(:stack_name, @stack_name, {:class => 'form-control'}.merge(@stack_name ? {:disabled => 'disabled'} : {}))
   - template.fetch('Parameters', {}).each do |name, options|
     :ruby
       form_name = "template_#{name.underscore}"
       ui_options = options.fetch('Ui', {})
       tag_options = {:class => 'form-control'}
-      next if ui_options['Disable']
+      if(ui_options['Disable'])
+        tag_options[:disabled] = "disabled"
+      end
       if(ui_options['Updatable'])
         tag_options['sparkle-url'] = public_send("#{ui_options['Updatable']}_path")
         tag_options['sparkle-ajax'] = :get
       end
       if(options['AllowedValues'])
-        option_values = options_for_select(options['AllowedValues'], ui_options[:updatable] ? options['Default'] : nil)
+        option_values = options_for_select(options['AllowedValues'], ui_options[:updatable] ? nil : options['Default'])
       elsif(ui_options['DynamicSelector'])
         option_values = public_send(ui_options['DynamicSelector'], options)
         tag_options[:include_blank] = true
@@ -41,9 +42,10 @@
   %div.col-md-12.form-group
     %div.pull-right
       - if style.to_s == 'new'
-        = submit_tag('Create', :class => 'btn btn-success')
+        = submit_tag('Create', :class => 'btn btn-success', :id => 'sparkle-stack-creator')
       - else
         = submit_tag('Update', :disable_with => 'Updating...')
     %div.clearfix
 :javascript
   sparkle_ui.form.enable_updatable_selectors();
+  sparkle_ui.form.hook_submission();
