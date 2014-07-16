@@ -22,11 +22,11 @@
         option_values = public_send(ui_options['DynamicSelector'], options)
         tag_options[:include_blank] = true
       end
-    - if options['Default'] && tag_options[:rel]
+    - if tag_options['sparkle-ajax']
       :javascript
-        sparkle_ui.form.register_updatable_select("#{tag_name}", {
-          message: #{escape_javascript(ui_options['DynamicMessage'])},
-          default_value: #{escape_javascript(options['Default'])}
+        sparkle_ui.form.register_updatable_select("#{form_name}", {
+          title: "#{escape_javascript(ui_options['DynamicMessage'])}",
+          default_value: #{options['Default'] ? '"' + escape_javascript(options['Default']) + '"' : 'null'}
         });
     %div.md-col-12.form-group
       = label_tag(form_name)
