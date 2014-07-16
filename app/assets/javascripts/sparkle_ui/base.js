@@ -151,20 +151,24 @@ sparkle_ui.create.poll_availability = function(url, error_url){
  *
  * @param dom_id [String] DOM ID of the select element
  * @param args [Hash]
- * @option args [String] :message optional loading message
+ * @option args [String] :title optional loading window title
  * @option args [Object] :default_value value to default selection
  * @note default value will be selected dynamically after page load to trigger update event
  **/
 sparkle_ui.form.register_updatable_select = function(dom_id, args){
-  if(args.message){
-    sparkle_ui.load_messages[dom_id] = args.message;
-  }
-  if(args.default_value){
-    default_setter = function(){
-      $('#' + dom_id).val(args.default_value).trigger('change');
+  if(typeof(args) == 'object'){
+    sparkle_ui.load_messages[dom_id] = args;
+    if(args.default_value){
+      default_setter = function(){
+        // NOTE: we need a slight delay before default selection to
+        // ensure we get the proper triggers fired
+        setTimeout(function(){
+          $('#' + dom_id).val(args.default_value).trigger('change');
+        }, 100);
+      }
+      $(document).ready(default_setter);
+      $(document).on('page:load', default_setter);
     }
-    $(document).ready(default_setter);
-    $(document).on('page:load', default_setter);
   }
 }
 
@@ -178,7 +182,7 @@ sparkle_ui.form.enable_updatable_selectors = function(){
       if(!args.title && $(this).attr('sparkle-loading')){
         args.title = $(this).attr('sparkle-loading');
       }
-      window_rails.loading.open({title: args.message});
+      window_rails.loading.open(args);
       if($(this).attr('sparkle-serialize') == 'only-self'){
         data = $(this).serializeObject();
       } else {
