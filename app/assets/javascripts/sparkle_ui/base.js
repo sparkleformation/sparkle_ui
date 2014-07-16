@@ -178,7 +178,7 @@ sparkle_ui.form.enable_updatable_selectors = function(){
       if(!args.title && $(this).attr('sparkle-loading')){
         args.title = $(this).attr('sparkle-loading');
       }
-      window_rails.loading.open(args);
+      window_rails.loading.open({title: args.message});
       if($(this).attr('sparkle-serialize') == 'only-self'){
         data = $(this).serializeObject();
       } else {
