@@ -1,3 +1,6 @@
 :erb
   $('#stack-event-list').html("<%= j(render(:partial => 'stack_event_item', :collection => @stack.events)) %>");
   $('#stack-event-list').attr('data-state', '<%= @stack.in_progress? ? 'active' : 'passive' %>');
+  <% if @stack.complete? -%>
+    window.document.location = '<%= sparkle_stack_path(@stack.encoded_id) %>';
+  <% end -%>
