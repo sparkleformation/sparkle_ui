@@ -194,7 +194,7 @@ sparkle_ui.form.enable_updatable_selectors = function(){
           window_rails.loading.close();
         }).fail(function(){
           window_rails.loading.close();
-          window.rails.alert.open('Error updating form!');
+          window_rails.alert.open({content: 'Error updating form!'});
         });
       } else {
         window.document.location = $(this).attr('sparkle-url') + '?' + $.param(data);
