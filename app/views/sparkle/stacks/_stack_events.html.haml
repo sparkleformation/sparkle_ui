@@ -17,5 +17,5 @@
                 Status
               %th
                 Message
-          %tbody#stack-event-list{'data-url' => events_sparkle_stack_path(stack.encoded_id), 'data-state' => stack.in_progress? ? 'active' : 'passive'}
+          %tbody#stack-event-list{'data-url' => events_sparkle_stack_path(stack.encoded_id, :event_id => stack.events.first.id), 'data-state' => stack.in_progress? ? 'active' : 'passive'}
             = render :partial => 'stack_event_item', :collection => stack.events

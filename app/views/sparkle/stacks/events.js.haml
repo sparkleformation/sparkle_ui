@@ -1,6 +1,17 @@
 :erb
-  $('#stack-event-list').html("<%= j(render(:partial => 'stack_event_item', :collection => @stack.events)) %>");
-  $('#stack-event-list').attr('data-state', '<%= @stack.in_progress? ? 'active' : 'passive' %>');
+  var events = [];
+  <% unless @events.empty? -%>
+    $('#stack-event-list').attr('data-url', '<%= events_sparkle_stack_path(@stack.encoded_id, :event_id => @events.first.id) %>');
+    <% @events.reverse.each do |event| -%>
+      delay = 0;
+      $("<%= j(render(:partial => 'stack_event_item', :locals => {:stack_event_item => event})) %>").hide().prependTo('#stack-event-list');
+      setTimeout(function(){ $('#stack-event-list [data-id=<%= event.id %>]').fadeIn() }, delay);
+      delay = delay + 1000;
+    <% end -%>
+  <% end -%>
   <% if @stack.complete? -%>
+    $('#stack-event-list').attr('data-state', '<%= @stack.in_progress? ? 'active' : 'passive' %>');
+  <% end -%>
+  <% if @stack.success? -%>
     window.document.location = '<%= sparkle_stack_path(@stack.encoded_id) %>';
   <% end -%>
