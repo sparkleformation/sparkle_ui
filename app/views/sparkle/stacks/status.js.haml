@@ -3,6 +3,7 @@
     :erb
       $('#<%= stack.stack_name %>_info').replaceWith("<%= j(render(:partial => 'stack_info', :locals => {:stack_info => stack})) %>");
       $('#<%= stack.stack_name %>_info').addClass('highlight-<%= stack.text_state %>');
+      window_rails.hooks.init_links('#<%= stack.stack_name %>_info');
       setTimeout(function(){$('#<%= stack.stack_name %>_info').removeClass('highlight-<%= stack.text_state %>');}, 2000);
   - else
     :erb
