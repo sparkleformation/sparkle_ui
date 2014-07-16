@@ -43,14 +43,20 @@ class Sparkle::StacksController < ApplicationController
   def new
     respond_to do |format|
       format.html do
-        @stack_name = stack_name_auto_generated? ? nil : ''
         @templates = template_selection_list
         @template_file = params.fetch(:template_file,
           Rails.application.config.sparkle.fetch(:default_create_template,
             @templates.flatten.detect{|t| t.end_with?('.rb')}
           )
         )
+        if(stack_name_auto_generated?)
+          @stack_name = generate_stack_name(
+            :template_file => @template_file,
+            :user => current_user
+          )
+        end
         @template = load_template(@template_file)
+        preprocess_template(@template)
       end
     end
   end
@@ -64,19 +70,13 @@ class Sparkle::StacksController < ApplicationController
           parameters = Hash[
             params.map do |key, value|
               next unless key.start_with?('template_')
-              [key.sub('template_', ''), value]
-            end
+              [key.sub('template_', '').camelize, value]
+            end.compact
           ]
           stack_arguments = Rails.application.config.sparkle.
             fetch(:stack_creation_defaults, {})
-          if(stack_name_auto_generated?)
-            stack_name = generate_stack_name(
-              :template => template_file,
-              :user => current_user
-            )
-          else
-            stack_name = params.delete(:stack_name)
-          end
+          stack_name = params.delete(:stack_name)
+          KnifeCloudformation::Utils::StackParameterScrubber.scrub!(template)
           new_stack = stacks_api.stacks.new(
             stack_arguments.merge(
               :stack_name => stack_name,
@@ -88,7 +88,9 @@ class Sparkle::StacksController < ApplicationController
           redirect_to wait_sparkle_stacks_path(:stack_name => new_stack.stack_name)
         rescue => e
           Rails.logger.error "Stack creation failed! #{e.class}: #{e.message}"
+          Rails.logger.debug "#{e.class}: #{e}\n#{e.backtrace.join("\n")}"
           flash[:error] = "Stack creation failed: #{e.message}"
+          redirect_to sparkle_stacks_path
         end
       end
     end
@@ -225,6 +227,13 @@ class Sparkle::StacksController < ApplicationController
   def load_template(file)
     full_path = File.join(SparkleFormation.sparkle_path, file)
     content = SparkleFormation.compile(full_path)
+  end
+
+  def preprocess_template(template)
+    if(preprocess = Rails.application.config.sparkle[:stack_template_preprocessor])
+      preprocess.call(:user => current_user, :template => template)
+    end
+    template
   end
 
 end
