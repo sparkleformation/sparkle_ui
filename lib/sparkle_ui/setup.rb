@@ -10,6 +10,9 @@ module SparkleUi
       def init!
         require 'base64'
         require 'knife-cloudformation'
+        require 'will_paginate'
+        require 'will_paginate/railtie'
+        require 'will_paginate/array'
         unless(Rails.application.config.respond_to?(:sparkle))
           Rails.application.config.sparkle = {}.with_indifferent_access
         end
