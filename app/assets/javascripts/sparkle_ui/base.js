@@ -124,9 +124,9 @@ sparkle_ui.create.poll_availability = function(url, error_url){
           window_rails.loading.close();
           window_rails.info.open({content: 'Stack initialization complete! Loading details...'});
         }
-      ).error(
-        function(response, status){
-          if(status == 404){
+      ).fail(
+        function(response){
+          if(response.status == '404'){
             sparkle_ui.create.poll_availability(url);
           } else {
             window_rails.loading.close();
