@@ -137,12 +137,13 @@ class Sparkle::StacksController < ApplicationController
   end
 
   def destroy
-    @stack = stacks_api.stack(params[:id])
+    @stack = stacks_api.stacks.get(params[:id])
     begin
       unless(SparkleUi.stack_modification_allowed?(current_user, @stack))
         raise "Current user is not allowed to modify this stack!"
       end
       @stack.destroy
+      stacks_api.remove_stack(params[:id])
       result = "Stack has been destroyed: #{@stack.stack_name}"
     rescue => error
       Rails.logger.error "Failed to destroy stack: #{error.class}: #{error}"
@@ -168,6 +169,7 @@ class Sparkle::StacksController < ApplicationController
     respond_to do |format|
       format.js do
         @stack = stacks_api.stack(params[:id])
+        @events = @stack.events.slice(0, @stack.events.map(&:id).index(params[:event_id]).to_i)
       end
     end
   end
