@@ -11,7 +11,5 @@
   <% end -%>
   <% if @stack.complete? -%>
     $('#stack-event-list').attr('data-state', '<%= @stack.in_progress? ? 'active' : 'passive' %>');
-  <% end -%>
-  <% if @stack.success? -%>
     window.document.location = '<%= sparkle_stack_path(@stack.encoded_id) %>';
   <% end -%>
