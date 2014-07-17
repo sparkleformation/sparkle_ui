@@ -1,5 +1,9 @@
 @import "bootstrap";
 
+.table-striped > tbody > tr:nth-child(odd).danger > td {
+  background: $state-danger-bg !important;
+}
+
 @-webkit-keyframes fade-success {
   0% {background: $brand-success;}
   100% {background: none;}
