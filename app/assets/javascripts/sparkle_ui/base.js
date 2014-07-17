@@ -42,7 +42,7 @@ sparkle_ui.list.poll = function(){
   if(sparkle_ui.list.in_progress().length > 0){
     setTimeout(
       sparkle_ui.list.poll_request,
-      sparkle_ui.config('index_poll_interval', 15000)
+      sparkle_ui.config('index_poll_interval', 25000)
     );
   }
 }
@@ -80,7 +80,7 @@ sparkle_ui.list.poll_request = function(){
     $('#stack-info-list').attr('data-url'),
     $.param({stack_names: sparkle_ui.list.in_progress_stack_names()})
   ).fail(function(){
-    window_rails.alert.open('Stack list update request failed!');
+    window_rails.alert.open({content: 'Stack list update request failed!'});
   }).always(function(){ sparkle_ui.list.poll(); });
 }
 
