@@ -9,3 +9,4 @@ end
 require 'sparkle_ui/engine'
 require 'will_paginate'
 require 'will_paginate/array'
+require 'will_paginate-bootstrap'

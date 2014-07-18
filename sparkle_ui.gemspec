@@ -20,4 +20,5 @@ Gem::Specification.new do |s|
   s.add_dependency 'will_paginate'
   s.add_dependency 'fog'
   s.add_dependency 'content_for_in_controllers'
+  s.add_dependency 'will_paginate-bootstrap'
 end
