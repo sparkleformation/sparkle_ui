@@ -1,4 +1,10 @@
+require 'tempfile'
+
 class Sparkle::StacksController < ApplicationController
+
+  if(defined?(SparkleBuilder))
+    include SparkleBuilder::Persistence
+  end
 
   # Decode stack id if found in parameters
   before_filter do
@@ -46,7 +52,10 @@ class Sparkle::StacksController < ApplicationController
         @templates = template_selection_list
         @template_file = params.fetch(:template_file,
           Rails.application.config.sparkle.fetch(:default_create_template,
-            @templates.flatten.detect{|t| t.end_with?('.rb')}
+            @templates.flatten.detect do |t|
+              !t.split('/').last.start_with?('_') &&
+                t.end_with?('.rb')
+            end
           )
         )
         if(stack_name_auto_generated?)
@@ -214,8 +223,18 @@ class Sparkle::StacksController < ApplicationController
           x.first <=> y.first
         end
       end
+      add_builder_templates(list)
     end.to_a.sort do |x, y|
       x.first <=> y.first
+    end
+  end
+
+  def add_builder_templates(list)
+    if(respond_to?(:list_templates))
+      list['User Built'] = list_templates.map(&:identity).map do |file|
+        file = File.basename(file).sub(File.extname(file), '')
+        [file.tr('-', '_').humanize, "BUILDER-#{file}"]
+      end
     end
   end
 
@@ -228,8 +247,20 @@ class Sparkle::StacksController < ApplicationController
   end
 
   def load_template(file)
-    full_path = File.join(SparkleFormation.sparkle_path, file)
-    content = SparkleFormation.compile(full_path)
+    if(file.start_with?('BUILDER-'))
+      MultiJson.load(
+        fetch_template(
+          file.sub('BUILDER-', '')
+        )
+      )
+    else
+      SparkleFormation.compile(
+        File.join(
+          SparkleFormation.sparkle_path,
+          file
+        )
+      )
+    end
   end
 
   def preprocess_template(template)
