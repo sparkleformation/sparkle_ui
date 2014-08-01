@@ -19,7 +19,10 @@ module SparkleUi
             try(:[], :orchestration).
             try(:[], :credentials)
           if(orchestration_credentials)
-            api = KnifeCloudformation::Provider.new(:fog => orchestration_credentials)
+            api = KnifeCloudformation::Provider.new(
+              :fog => orchestration_credentials,
+              :logger => Rails.logger
+            )
             Rails.application.config.sparkle[:provider_api] = api
             Rails.application.config.sparkle[:orchestration_connection] = api.connection
             true
