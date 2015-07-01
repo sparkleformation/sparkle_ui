@@ -1,5 +1,3 @@
-@import "bootstrap";
-
 .table-striped > tbody > tr:nth-child(odd).danger > td {
   background: $state-danger-bg !important;
 }
