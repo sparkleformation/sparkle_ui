@@ -9,18 +9,24 @@ module SparkleUi
       # @return [TrueClass, FalseClass]
       def init!
         require 'base64'
-        require 'knife-cloudformation'
+        require 'sfn'
         require 'content_for_in_controllers'
         unless(Rails.application.config.respond_to?(:sparkle))
-          Rails.application.config.sparkle = {}.with_indifferent_access
+          if(Rails.application.config.respond_to?(:settings))
+            Rails.application.config.sparkle = Rails.application.config.settings.fetch(:sparkle, Smash.new)
+          else
+            Rails.application.config.sparkle = Smash.new
+          end
+        else
+          Rails.application.config.sparkle = Rails.application.config.sparkle.to_smash
         end
-        unless(Rails.application.config.sparkle[:orchestration_connection])
-          orchestration_credentials = Rails.application.config.sparkle.
-            try(:[], :orchestration).
-            try(:[], :credentials)
+        if(Rails.application.config.sparkle[:orchestration])
+          orchestration_provider = Rails.application.config.sparkle.fetch(:orchestration, :provider, :aws)
+          orchestration_credentials = Rails.application.config.sparkle.get(:orchestration, :credentials)
           if(orchestration_credentials)
-            api = KnifeCloudformation::Provider.new(
-              :fog => orchestration_credentials,
+            api = Sfn::Provider.new(
+              :provider => orchestration_provider,
+              :miasma => orchestration_credentials,
               :logger => Rails.logger
             )
             Rails.application.config.sparkle[:provider_api] = api
