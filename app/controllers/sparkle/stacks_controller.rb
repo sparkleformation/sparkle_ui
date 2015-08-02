@@ -20,13 +20,13 @@ class Sparkle::StacksController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @stacks = stacks_api.stacks.sort do |x, y|
-          if(x.creation_time.nil?)
+        @stacks = stacks_api.stacks.all.sort do |x, y|
+          if(x.created.nil?)
             1
-          elsif(y.creation_time.nil?)
+          elsif(y.created.nil?)
             -1
           else
-            y.creation_time <=> x.creation_time
+            y.created <=> x.created
           end
         end
         @stacks = @stacks.paginate(params)
