@@ -19,8 +19,9 @@
                 Timestamp
           %tbody
             - stack.resources.all.each do |resource|
-              %tr
-                %td= resource.logical_id
-                %td= resource.type
-                %td= resource.status
-                %td= resource.updated
+              - if stacks_api.connection.data.fetch(:stack_types, []).include?(resource.type)
+                %tr.linked{:href => sparkle_stack_path(Base64.urlsafe_encode64(resource.id))}
+                  %td= resource.logical_id
+                  %td= resource.type
+                  %td= resource.status
+                  %td= resource.updated
