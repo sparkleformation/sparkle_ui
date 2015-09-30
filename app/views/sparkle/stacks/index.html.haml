@@ -4,7 +4,6 @@
       %div.panel-title
         %h1= Rails.application.config.sparkle.fetch(:ui_index_title, 'Stacks')
       %div.panel-body
-        %div.sparkle-pagination.well.well-sm= will_paginate @stacks, :renderer => BootstrapPagination::Rails, :class => 'pagination-sm'
         %ul.list-group#stack-info-list{'data-url' => status_sparkle_stacks_path}
           = render :partial => 'stack_info', :collection => @stacks
         %div.sparkle-pagination.well.well-sm= will_paginate @stacks, :renderer => BootstrapPagination::Rails, :class => 'pagination-sm'
