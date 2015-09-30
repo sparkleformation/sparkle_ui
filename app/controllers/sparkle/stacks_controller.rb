@@ -2,6 +2,8 @@ require 'tempfile'
 
 class Sparkle::StacksController < ApplicationController
 
+  helper_method :stacks_api
+
   if(defined?(SparkleBuilder))
     include SparkleBuilder::Persistence
   end
