@@ -15,7 +15,7 @@ Gem::Specification.new do |s|
 
   s.add_dependency 'rails', '~> 4.0.0'
   s.add_dependency 'sparkle_formation'
-  s.add_dependency 'knife-cloudformation'
+  s.add_dependency 'sfn'
   s.add_dependency 'window_rails', '~> 1.0'
   s.add_dependency 'will_paginate'
   s.add_dependency 'fog'
