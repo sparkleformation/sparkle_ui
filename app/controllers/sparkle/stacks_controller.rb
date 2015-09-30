@@ -37,7 +37,7 @@ class Sparkle::StacksController < ApplicationController
   def show
     respond_to do |format|
       format.html do
-        @stack = stacks_api.stack(params[:id])
+        @stack = stacks_api.connection.stacks.get(params[:id])
         unless(@stack)
           flash[:error] = "Failed to locate requested stack (ID: #{params[:id]})"
           redirect_to sparkle_stacks_path
@@ -94,7 +94,7 @@ class Sparkle::StacksController < ApplicationController
             )
           ).create
           stacks_api.update_stack_list!
-          redirect_to wait_sparkle_stacks_path(:stack_name => new_stack.stack_name)
+          redirect_to wait_sparkle_stacks_path(:stack_name => new_stack.name)
         rescue => e
           Rails.logger.error "Stack creation failed! #{e.class}: #{e.message}"
           Rails.logger.debug "#{e.class}: #{e}\n#{e.backtrace.join("\n")}"
@@ -128,7 +128,7 @@ class Sparkle::StacksController < ApplicationController
     respond_to do |format|
       format.js do
         if(@stack_name)
-          @stack = stacks_api.stacks.detect{|s| s.stack_name == @stack_name}
+          @stack = stacks_api.stacks.detect{|s| s.name == @stack_name}
           unless(@stack)
             render :text => "Stack not found (#{@stack_name})", :status => 404
           end
@@ -153,7 +153,7 @@ class Sparkle::StacksController < ApplicationController
       end
       @stack.destroy
       stacks_api.remove_stack(params[:id])
-      result = "Stack has been destroyed: #{@stack.stack_name}"
+      result = "Stack has been destroyed: #{@stack.name}"
     rescue => error
       Rails.logger.error "Failed to destroy stack: #{error.class}: #{error}"
       Rails.logger.debug "#{error.class}: #{error}\n#{error.backtrace.join("\n")}"
@@ -178,7 +178,7 @@ class Sparkle::StacksController < ApplicationController
     respond_to do |format|
       format.js do
         @stack = stacks_api.stack(params[:id])
-        @events = @stack.events.slice(0, @stack.events.map(&:id).index(params[:event_id]).to_i)
+        @events = @stack.events.all.slice(0, @stack.events.all.map(&:id).index(params[:event_id]).to_i)
       end
     end
   end
@@ -186,10 +186,8 @@ class Sparkle::StacksController < ApplicationController
   def status
     respond_to do |format|
       format.js do
-        @stacks = stacks_api.stacks.find_all do |stack|
-          params[:stack_names].include?(stack.stack_name)
-        end
-        @removed_stacks = params[:stack_names] - @stacks.map(&:stack_name)
+        @stacks = params[:stack_names].map{|s_name| stacks_api.stacks.get(s_name) }
+        @removed_stacks = params[:stack_names] - @stacks.map(&:name)
       end
     end
   end

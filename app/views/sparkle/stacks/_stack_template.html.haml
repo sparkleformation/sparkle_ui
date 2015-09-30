@@ -6,4 +6,4 @@
           Template
     %div.panel-collapse.collapse#template-display
       %div.panel-body
-        %pre#stack-template-json~ JSON.pretty_generate(stack.template)
+        %pre#stack-template-json~ JSON.pretty_generate(stack.template.to_hash)
