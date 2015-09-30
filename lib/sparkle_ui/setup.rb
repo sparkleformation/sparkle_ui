@@ -33,6 +33,13 @@ module SparkleUi
             )
             Rails.application.config.sparkle[:provider_api] = api
             Rails.application.config.sparkle[:orchestration_connection] = api.connection
+            api.connection.data[:stack_types] = (
+              [
+                api.connection.class.const_get(:RESOURCE_MAPPING).detect do |klass, info|
+                  info[:api] == :orchestration
+                end.first
+              ] + ['Custom::JackalStack']
+            ).compact.uniq
             true
           else
             Rails.logger.warn 'Unable to connect to orchestration provider. No credentials found!'
