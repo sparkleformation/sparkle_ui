@@ -20,7 +20,12 @@ class Sparkle::StacksController < ApplicationController
   def index
     respond_to do |format|
       format.html do
-        @stacks = stacks_api.stacks.all.sort do |x, y|
+        # This is super horrible, but we can make better later when we
+        # get the caching support rolling again
+        @children = stacks_api.stacks.all.map(&:nested_stacks).flatten.find_all{|x| x.data[:parent_stack]}.map(&:id)
+        @stacks = stacks_api.stacks.all.find_all do |stk|
+          !@children.include?(stk.id)
+        end.sort do |x, y|
           if(x.created.nil?)
             1
           elsif(y.created.nil?)
