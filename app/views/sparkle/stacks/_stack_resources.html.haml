@@ -18,9 +18,9 @@
               %th
                 Timestamp
           %tbody
-            - stack.resources.each do |resource|
+            - stack.resources.all.each do |resource|
               %tr
-                %td= resource.logical_resource_id
-                %td= resource.resource_type
-                %td= resource.resource_status
-                %td= resource.updated_time
+                %td= resource.logical_id
+                %td= resource.type
+                %td= resource.status
+                %td= resource.updated

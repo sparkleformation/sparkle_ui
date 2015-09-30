@@ -1,6 +1,6 @@
 %div.container.sparkle-ui#stack-info{'data-id' => @stack.encoded_id}
   %div
-    %h2.title.pull-left= @stack.stack_name
+    %h2.title.pull-left= @stack.name
     %div.pull-right
       %span.label{:class => "label-#{@stack.text_state}"}= @stack.status
     %div.clearfix
@@ -10,10 +10,10 @@
   - else
     = render :partial => 'stack_events', :locals => {:stack => @stack}
   = render :partial => 'stack_resources', :locals => {:stack => @stack}
-  = render :partial => 'stack_nodes', :locals => {:stack => @stack}
+  = #render :partial => 'stack_nodes', :locals => {:stack => @stack}
   = render :partial => 'stack_parameters', :locals => {:stack => @stack}
   = render :partial => 'stack_template', :locals => {:stack => @stack}
-  - unless @stack.success?
+  - unless false #@stack.success?
     = render :partial => 'stack_outputs', :locals => {:stack => @stack}
   - else
     = render :partial => 'stack_events', :locals => {:stack => @stack}
