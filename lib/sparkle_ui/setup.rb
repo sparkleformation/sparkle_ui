@@ -27,7 +27,9 @@ module SparkleUi
             api = Sfn::Provider.new(
               :provider => orchestration_provider,
               :miasma => orchestration_credentials,
-              :logger => Rails.logger
+              :logger => Rails.logger,
+              :async => false,
+              :fetch => true
             )
             Rails.application.config.sparkle[:provider_api] = api
             Rails.application.config.sparkle[:orchestration_connection] = api.connection
