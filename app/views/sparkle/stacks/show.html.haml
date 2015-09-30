@@ -13,7 +13,7 @@
   = #render :partial => 'stack_nodes', :locals => {:stack => @stack}
   = render :partial => 'stack_parameters', :locals => {:stack => @stack}
   = render :partial => 'stack_template', :locals => {:stack => @stack}
-  - unless false #@stack.success?
+  - unless @stack.success?
     = render :partial => 'stack_outputs', :locals => {:stack => @stack}
   - else
     = render :partial => 'stack_events', :locals => {:stack => @stack}
