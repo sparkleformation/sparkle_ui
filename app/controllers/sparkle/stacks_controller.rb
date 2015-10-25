@@ -1,6 +1,7 @@
 require 'tempfile'
 
 class Sparkle::StacksController < ApplicationController
+  include Bogo::Memoization
 
   helper_method :stacks_api
 
@@ -202,7 +203,33 @@ class Sparkle::StacksController < ApplicationController
   private
 
   def stacks_api
-    Rails.application.config.sparkle[:provider_api]
+    if(false)
+      # TODO: User config extracted credentials
+    else
+      o_config = Rails.application.config.sparkle[:orchestration]
+    end
+    unless(o_config)
+      raise 'No orchestration API configuration provided!'
+    end
+    memoize(o_config.to_smash.checksum, :direct) do
+      provider = Sfn::Provider.new(
+        :provider => o_config[:provider],
+        :miasma => o_config[:credentials],
+        :logger => Rails.logger,
+        :async => true,
+        :fetch => true,
+        :stack_expansion_interval => 90,
+        :stack_list_interval => 60
+      )
+      provider.connection.data[:stack_types] = (
+        [
+          provider.connection.class.const_get(:RESOURCE_MAPPING).detect do |klass, info|
+            info[:api] == :orchestration
+          end.first
+        ] + ['Custom::JackalStack']
+      ).compact.uniq
+      provider
+    end
   end
 
   def template_selection_list
