@@ -20,32 +20,6 @@ module SparkleUi
         else
           Rails.application.config.sparkle = Rails.application.config.sparkle.to_smash
         end
-        if(Rails.application.config.sparkle[:orchestration])
-          orchestration_provider = Rails.application.config.sparkle.fetch(:orchestration, :provider, :aws)
-          orchestration_credentials = Rails.application.config.sparkle.get(:orchestration, :credentials)
-          if(orchestration_credentials)
-            api = Sfn::Provider.new(
-              :provider => orchestration_provider,
-              :miasma => orchestration_credentials,
-              :logger => Rails.logger,
-              :async => false,
-              :fetch => true
-            )
-            Rails.application.config.sparkle[:provider_api] = api
-            Rails.application.config.sparkle[:orchestration_connection] = api.connection
-            api.connection.data[:stack_types] = (
-              [
-                api.connection.class.const_get(:RESOURCE_MAPPING).detect do |klass, info|
-                  info[:api] == :orchestration
-                end.first
-              ] + ['Custom::JackalStack']
-            ).compact.uniq
-            true
-          else
-            Rails.logger.warn 'Unable to connect to orchestration provider. No credentials found!'
-            false
-          end
-        end
         unless(Rails.application.config.sparkle[:stack_modify_checker])
           Rails.application.config.sparkle[:stack_modify_checker] = lambda{|*_| true}
         end
