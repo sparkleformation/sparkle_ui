@@ -200,14 +200,10 @@ class Sparkle::StacksController < ApplicationController
     end
   end
 
-  private
+  protected
 
   def stacks_api
-    if(false)
-      # TODO: User config extracted credentials
-    else
-      o_config = Rails.application.config.sparkle[:orchestration]
-    end
+    o_config = Rails.application.config.sparkle[:orchestration]
     unless(o_config)
       raise 'No orchestration API configuration provided!'
     end
