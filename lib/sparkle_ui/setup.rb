@@ -18,7 +18,7 @@ module SparkleUi
             Rails.application.config.sparkle = Smash.new
           end
         else
-          Rails.application.config.sparkle = Rails.application.config.sparkle.to_smash
+          Rails.application.config.sparkle = Smash.new
         end
         unless(Rails.application.config.sparkle[:stack_modify_checker])
           Rails.application.config.sparkle[:stack_modify_checker] = lambda{|*_| true}
