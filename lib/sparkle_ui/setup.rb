@@ -38,7 +38,7 @@ module SparkleUi
   # Verify user is allowed to modify stack
   #
   # @param user [Object]
-  # @param stack [Fog::Model::Stack]
+  # @param stack [Miasma::Models::Orchestration::Stack]
   # @return [TrueClass, FalseClass]
   def self.stack_modification_allowed?(user, stack)
     !!Rails.application.config.sparkle[:stack_modify_checker].call(user, stack)
